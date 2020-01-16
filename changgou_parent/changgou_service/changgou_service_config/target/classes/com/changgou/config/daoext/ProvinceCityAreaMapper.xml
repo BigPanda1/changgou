@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changgou.config.daoext.ProvinceCityAreaMapper">
+
+    <resultMap id="provinceMap" type="com.changgou.config.pojo.Provinces">
+        <id column="provinceid" property="provinceid"></id>
+        <result column="province" property="province"></result>
+            <collection property="cityList" ofType="com.changgou.config.pojo.City">
+                <id column="cityid" property="cityid"></id>
+                <result column="city" property="city"></result>
+                    <collection property="areasList" ofType="com.changgou.config.pojo.Areas">
+                        <id column="areaid" property="areaid"></id>
+                        <result column="area" property="area"></result>
+                    </collection>
+            </collection>
+    </resultMap>
+
+    <select id="findPro" resultMap="provinceMap">
+        SELECT
+        p.provinceid , p.province,
+        c.cityid,c.city,
+        q.areaid,q.area
+        FROM
+        tb_provinces p LEFT JOIN tb_cities c
+        ON p.provinceid = c.provinceid
+        LEFT JOIN tb_areas q
+        ON c.cityid = q.cityid
+    </select>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changgou.goods.daoetc.CategoryNodeMapper">
+
+    <resultMap id="categoryMap" type="com.changgou.goods.ext.CategoryNode">
+        <id column="one_id" property="id"></id>
+        <result column="one_name" property="name"></result>
+            <collection property="children" ofType="com.changgou.goods.ext.CategoryNode">
+                <id column="two_id" property="id"></id>
+                <result column="two_name" property="name"></result>
+                    <collection property="children" ofType="com.changgou.goods.ext.CategoryNode">
+                        <id column="three_id" property="id"></id>
+                        <result column="three_name" property="name"></result>
+                    </collection>
+            </collection>
+    </resultMap>
+
+    <select id="findCategoryNodeList" resultMap="categoryMap">
+      SELECT
+   a.id one_id , a.name one_name,
+	b.id two_id , b.name two_name,
+	c.id three_id , c.name three_name
+	 FROM
+	 tb_category a LEFT JOIN tb_category b
+    	ON a.id = b.parent_id
+			LEFT JOIN tb_category c
+			ON b.id = c.parent_id
+			WHERE a.parent_id = 0
+    </select>
+</mapper>
